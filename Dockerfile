@@ -1,16 +1,17 @@
-# Stage 1: Build the Spring Boot app (Java 21)
+# Stage 1: Build (Java 21)
 FROM maven:3.9.9-eclipse-temurin-21 AS build
 
 WORKDIR /app
 
-# Copy backend source
-COPY proj-chat-website-Backend /app
+# Copy everything (since project is at root now)
+COPY . .
 
-# Build the application
+# Build jar
 RUN mvn clean package -DskipTests
 
-# Stage 2: Run with lightweight JDK 21
-FROM eclipse-temurin:21-jdk-jammy
+
+# Stage 2: Run (lightweight)
+FROM eclipse-temurin:21-jre-jammy
 
 WORKDIR /app
 
