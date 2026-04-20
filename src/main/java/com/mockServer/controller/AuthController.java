@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.mockServer.entity.User;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -20,11 +22,8 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody User user) throws Exception {
-        User existingUser = userRepository.findByUsername(user.getUsername());
-        if (existingUser == null || !existingUser.getPassword().equals(user.getPassword())) {
-            return ResponseEntity.status(401).body("Invalid username or password");
-        }
-        return ResponseEntity.ok("Login successful!");
+        Optional<User> existingUser = userRepository.findByUsername(user.getUsername());
+        return ResponseEntity.status(401).body("Invalid username or password");
     }
 
     @PostMapping("/register")
@@ -32,4 +31,6 @@ public class AuthController {
         userRepository.save(user);
         return ResponseEntity.ok("User registered successfully!");
     }
+
+
 }
